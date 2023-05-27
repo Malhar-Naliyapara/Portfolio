@@ -1,0 +1,61 @@
+<!-- Form Layout -->
+<div class="card">
+  <div class="card-body">
+    <div class="mb-56">
+      <h4 class="mb-56 d-inline" *ngIf="isAdd">Add Tag</h4>
+      <h4 class="mb-56 d-inline" *ngIf="!isAdd">Edit Tag</h4>
+      <div class="button-row mb-24 d-inline float-right">
+        <button
+          *ngIf="isAdd"
+          mat-raised-button
+          class="me-8 mb-8"
+          [routerLink]="['../tags']"
+          color="primary"
+        >
+          Tag List
+        </button>
+        <button
+          *ngIf="!isAdd"
+          mat-raised-button
+          class="me-8 mb-8"
+          [routerLink]="['../../tags']"
+          color="primary"
+        >
+          Tag List
+        </button>
+      </div>
+    </div>
+    <form [formGroup]="tagForm" (ngSubmit)="onSubmit()">
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="name"
+          placeholder="Enter your Name"
+        />
+        <mat-error>Name can not be empty.</mat-error>
+      </mat-form-field>
+
+      <button
+        *ngIf="isAdd"
+        mat-button
+        class="btn btn-info fw-normal"
+        [disabled]="!tagForm.valid"
+        type="submit"
+      >
+        Submit
+      </button>
+      <button
+        *ngIf="!isAdd"
+        mat-button
+        class="btn btn-info fw-normal"
+        [disabled]="!tagForm.valid"
+        type="button"
+        (click)="onEdit()"
+      >
+        Edit
+      </button>
+    </form>
+  </div>
+</div>

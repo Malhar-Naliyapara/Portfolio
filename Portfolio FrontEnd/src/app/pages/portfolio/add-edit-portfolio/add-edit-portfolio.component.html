@@ -1,0 +1,359 @@
+<!-- Form Layout -->
+<div class="card">
+  <div class="card-body">
+    <div class="mb-56">
+      <h4 class="mb-56 d-inline" *ngIf="isAdd">Add Portfolio</h4>
+      <h4 class="mb-56 d-inline" *ngIf="!isAdd">Edit Portfolio</h4>
+      <div class="button-row mb-24 d-inline float-right">
+        <button
+          *ngIf="isAdd"
+          mat-raised-button
+          class="me-8 mb-8"
+          [routerLink]="['../portfolios']"
+          color="primary"
+        >
+          Portfolio List
+        </button>
+        <button
+          *ngIf="!isAdd"
+          mat-raised-button
+          class="me-8 mb-8"
+          [routerLink]="['../../portfolios']"
+          color="primary"
+        >
+          Portfolio List
+        </button>
+      </div>
+    </div>
+    <form
+      [formGroup]="portfolioForm"
+      (ngSubmit)="onSubmit()"
+      enctype="multipart/form-data"
+    >
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Title</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="title"
+          placeholder="Enter your Title"
+        />
+        <mat-error>Title can not be empty.</mat-error>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Client Name</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="clientName"
+          placeholder="Enter your Client Name"
+        />
+        <mat-error>Client Name can not be empty.</mat-error>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="fs-16">
+        <ngx-mat-file-input
+          name="image"
+          FileInput="image"
+          formControlName="image"
+          type="file"
+        >
+          <mat-icon ngxMatFileInputIcon>folder</mat-icon>
+          <mat-hint>Hint</mat-hint>
+        </ngx-mat-file-input>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Content</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="content"
+          placeholder="Enter your Content"
+        />
+        <mat-error>Content can not be empty.</mat-error>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Category *</mat-label>
+        <mat-chip-list #category aria-label="Category selection">
+          <mat-chip
+            *ngFor="let category of categoryObject"
+            (removed)="removeCategory(category)"
+          >
+            {{ category }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+          <input
+            placeholder="New category..."
+            #categoryInput
+            formControlName="category"
+            [matAutocomplete]="autoCategory"
+            [matChipInputFor]="category"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addCategory($event)"
+          />
+        </mat-chip-list>
+        <mat-autocomplete
+          #autoCategory="matAutocomplete"
+          (optionSelected)="selectedCategory($event)"
+        >
+          <mat-option
+            *ngFor="let category of filteredCategories | async"
+            [value]="category.name"
+          >
+            {{ category.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Select your Technology</mat-label>
+        <mat-select formControlName="technology" required>
+          <mat-option>--</mat-option>
+          <mat-option
+            *ngFor="let technology of technologies"
+            [value]="technology.technology"
+          >
+            {{ technology.technology }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="portfolioForm.controls['technology'].hasError('required')"
+        >
+          This field is required
+        </mat-error>
+        <mat-hint>You can pick up your technology here</mat-hint>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Tags *</mat-label>
+        <mat-chip-list #tag aria-label="Tag selection">
+          <mat-chip *ngFor="let tag of tagObject" (removed)="removeTag(tag)">
+            {{ tag }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+          <input
+            placeholder="New tags..."
+            #tagInput
+            formControlName="tags"
+            [matAutocomplete]="autoTag"
+            [matChipInputFor]="tag"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addTag($event)"
+          />
+        </mat-chip-list>
+        <mat-autocomplete
+          #autoTag="matAutocomplete"
+          (optionSelected)="selectedTag($event)"
+        >
+          <mat-option
+            *ngFor="let tag of filteredTags | async"
+            [value]="tag.name"
+          >
+            {{ tag.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Web Server</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="webServer"
+          placeholder="Enter your Web Server"
+        />
+        <mat-error>Web Server can not be empty.</mat-error>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Theme</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="theme"
+          placeholder="Enter your Theme"
+        />
+
+        <mat-error>Theme can not be empty.</mat-error>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Package *</mat-label>
+        <mat-chip-list #package aria-label="Package selection">
+          <mat-chip
+            *ngFor="let package of packageObject"
+            (removed)="removePackage(package)"
+          >
+            {{ package }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+          <input
+            placeholder="New Package..."
+            #packageInput
+            formControlName="package"
+            [matAutocomplete]="autoPackage"
+            [matChipInputFor]="package"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addPackage($event)"
+          />
+        </mat-chip-list>
+        <mat-autocomplete
+          #autoPackage="matAutocomplete"
+          (optionSelected)="selectedPackage($event)"
+        >
+          <mat-option
+            *ngFor="let package of filteredPackages | async"
+            [value]="package.package"
+          >
+            {{ package.package }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Payment Method</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="paymentMethod"
+          placeholder="Enter your Payment Method"
+        />
+        <mat-error>Payment Method can not be empty.</mat-error>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <div class="fs-16">
+        <mat-label>Multi Theme : </mat-label>
+        <mat-slide-toggle
+          class="example-margin"
+          [checked]="checked"
+          formControlName="multiTheme"
+        >
+          Slide me!
+        </mat-slide-toggle>
+      </div>
+
+      <!-- Assigned Column -->
+      <div class="fs-16">
+        <mat-label>Multi Site : </mat-label>
+        <mat-slide-toggle
+          class="example-margin"
+          [checked]="checked"
+          formControlName="multiSite"
+        >
+          Slide me!
+        </mat-slide-toggle>
+      </div>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Site Development Duration</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="siteDevelopmentDuration"
+          placeholder="Enter your Site Development Duration"
+        />
+        <mat-error>Site Development Duration can not be empty.</mat-error>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>AddOn</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="addOn"
+          placeholder="Enter your AddOn"
+        />
+        <mat-error>AddOn can not be empty.</mat-error>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Site Link</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="siteLink"
+          placeholder="Enter your Site Link"
+        />
+        <mat-error>Site Link can not be empty.</mat-error>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Display Index</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="displayIndex"
+          placeholder="Enter your Display Index"
+        />
+        <mat-error>Display Index can not be empty.</mat-error>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-label>Project Closed</mat-label>
+      <mat-slide-toggle
+        class="example-margin"
+        [checked]="checked"
+        formControlName="projectClosed"
+      >
+        Slide me!
+      </mat-slide-toggle>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Notes</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="notes"
+          placeholder="Enter your Notes"
+        />
+        <mat-error>Notes can not be empty.</mat-error>
+      </mat-form-field>
+
+      <button
+        *ngIf="isAdd"
+        mat-button
+        class="btn btn-info fw-normal"
+        [disabled]="!portfolioForm.valid"
+        type="submit"
+      >
+        Submit
+      </button>
+      <button
+        *ngIf="!isAdd"
+        mat-button
+        class="btn btn-info fw-normal"
+        [disabled]="!portfolioForm.valid"
+        type="button"
+        (click)="onEdit()"
+      >
+        Edit
+      </button>
+    </form>
+  </div>
+</div>

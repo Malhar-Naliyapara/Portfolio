@@ -1,0 +1,133 @@
+<!-- Form Layout -->
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="large"
+  color="#fff"
+  type="square-jelly-box"
+  [fullScreen]="true"
+  ><p style="color: white">Loading...</p></ngx-spinner
+>
+<div class="card">
+  <div class="card-body">
+    <div class="mb-56">
+      <h4 class="mb-56 d-inline" *ngIf="isAdd">Add Access Token</h4>
+      <h4 class="mb-56 d-inline" *ngIf="!isAdd">Edit Access Token</h4>
+      <div class="button-row mb-24 d-inline float-right">
+        <button
+          *ngIf="isAdd"
+          mat-raised-button
+          class="me-8 mb-8"
+          [routerLink]="['../accessToken']"
+          color="primary"
+        >
+          Access Token List
+        </button>
+        <button
+          *ngIf="!isAdd"
+          mat-raised-button
+          class="me-8 mb-8"
+          [routerLink]="['../../accessToken']"
+          color="primary"
+        >
+          Access Token List
+        </button>
+      </div>
+    </div>
+    <form [formGroup]="accessTokenForm" (ngSubmit)="onSubmit()">
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Token</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="token"
+          placeholder="Enter your Token"
+        />
+        <mat-error>Token can not be empty.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Link</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="url"
+          placeholder="Enter your Link"
+        />
+        <mat-error>Link can not be empty.</mat-error>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Select your Technology</mat-label>
+        <mat-select formControlName="technology" required>
+          <mat-option>--</mat-option>
+          <mat-option
+            *ngFor="let technology of technologies"
+            [value]="technology._id"
+          >
+            {{ technology.technology }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="accessTokenForm.controls['technology'].hasError('required')"
+        >
+          This field is required
+        </mat-error>
+        <mat-hint>You can pick up your technology here</mat-hint>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Select your Client</mat-label>
+        <mat-select formControlName="client" required>
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let client of clients" [value]="client._id">
+            {{ client.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="accessTokenForm.controls['client'].hasError('required')"
+        >
+          This field is required
+        </mat-error>
+        <mat-hint>You can pick up your technology here</mat-hint>
+      </mat-form-field>
+
+      <!-- Assigned Column -->
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Select your Status</mat-label>
+        <mat-select formControlName="status" required>
+          <mat-option>--</mat-option>
+          <mat-option [value]="true"> True </mat-option>
+          <mat-option [value]="false"> False </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="accessTokenForm.controls['status'].hasError('required')"
+        >
+          This field is required
+        </mat-error>
+        <mat-hint>You can pick up your technology here</mat-hint>
+      </mat-form-field>
+
+      <button
+        *ngIf="isAdd"
+        mat-button
+        class="btn btn-info fw-normal"
+        [disabled]="!accessTokenForm.valid"
+        type="submit"
+      >
+        Submit
+      </button>
+      <button
+        *ngIf="!isAdd"
+        mat-button
+        class="btn btn-info fw-normal"
+        [disabled]="!accessTokenForm.valid"
+        type="button"
+        (click)="onEdit()"
+      >
+        Edit
+      </button>
+    </form>
+  </div>
+</div>

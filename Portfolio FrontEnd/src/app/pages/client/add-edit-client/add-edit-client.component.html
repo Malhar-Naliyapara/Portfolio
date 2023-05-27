@@ -1,0 +1,80 @@
+<!-- Form Layout -->
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="large"
+  color="#fff"
+  type="square-jelly-box"
+  [fullScreen]="true"
+  ><p style="color: white">Loading...</p></ngx-spinner
+>
+<div class="card">
+  <div class="card-body">
+    <div class="mb-56">
+      <h4 class="mb-56 d-inline" *ngIf="isAdd">Add Client</h4>
+      <h4 class="mb-56 d-inline" *ngIf="!isAdd">Edit Client</h4>
+      <div class="button-row mb-24 d-inline float-right">
+        <button
+          *ngIf="isAdd"
+          mat-raised-button
+          class="me-8 mb-8"
+          [routerLink]="['../clients']"
+          color="primary"
+        >
+          Client List
+        </button>
+        <button
+          *ngIf="!isAdd"
+          mat-raised-button
+          class="me-8 mb-8"
+          [routerLink]="['../../clients']"
+          color="primary"
+        >
+          Client List
+        </button>
+      </div>
+    </div>
+    <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="name"
+          placeholder="Enter your Name"
+        />
+        <mat-error>Name can not be empty.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="email"
+          placeholder="Enter your Email"
+        />
+        <mat-error>Email can not be empty.</mat-error>
+      </mat-form-field>
+
+      <button
+        *ngIf="isAdd"
+        mat-button
+        class="btn btn-info fw-normal"
+        [disabled]="!clientForm.valid"
+        type="submit"
+      >
+        Submit
+      </button>
+      <button
+        *ngIf="!isAdd"
+        mat-button
+        class="btn btn-info fw-normal"
+        [disabled]="!clientForm.valid"
+        type="button"
+        (click)="onEdit()"
+      >
+        Edit
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,94 @@
+<!-- Form Layout -->
+<div class="card">
+  <div class="card-body">
+    <div class="mb-56">
+      <h4 class="mb-56 d-inline" *ngIf="isAdd">Add User</h4>
+      <h4 class="mb-56 d-inline" *ngIf="!isAdd">Edit User</h4>
+      <div class="button-row mb-24 d-inline float-right">
+        <button
+          *ngIf="isAdd"
+          type="button"
+          mat-raised-button
+          class="me-8 mb-8"
+          [routerLink]="['../users']"
+          color="primary"
+        >
+          User List
+        </button>
+        <button
+          *ngIf="!isAdd"
+          type="button"
+          mat-raised-button
+          class="me-8 mb-8"
+          [routerLink]="['../../users']"
+          color="primary"
+        >
+          User List
+        </button>
+      </div>
+    </div>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="name"
+          placeholder="Enter your Name"
+        />
+        <mat-error>Name can not be empty.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+        />
+        <mat-error>Email can not be empty.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          formControlName="password"
+          placeholder="Enter your password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        <mat-error>Password can not be empty.</mat-error>
+      </mat-form-field>
+
+      <button
+        *ngIf="isAdd"
+        mat-button
+        class="btn btn-info fw-normal"
+        [disabled]="!userForm.valid"
+        type="submit"
+      >
+        Submit
+      </button>
+      <button
+        *ngIf="!isAdd"
+        mat-button
+        class="btn btn-info fw-normal"
+        [disabled]="!userForm.valid"
+        type="submit"
+        (click)="onEdit()"
+      >
+        Edit
+      </button>
+    </form>
+  </div>
+</div>

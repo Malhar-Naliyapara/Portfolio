@@ -1,0 +1,73 @@
+<!-- Daily Activity -->
+<mat-card class="w-100">
+  <mat-card-content>
+    <div class="mb-56">
+      <h4 class="mb-56 d-inline">Server List</h4>
+      <div class="button-row mb-24 d-inline float-right">
+        <button
+          mat-raised-button
+          class="me-8 mb-8"
+          [routerLink]="['../addServer']"
+          color="primary"
+        >
+          Add Server
+        </button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table mat-table [dataSource]="serverData" class="text-nowrap w-100">
+        <!-- Id Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>Id</th>
+          <td mat-cell class="fw-medium op-5" *matCellDef="let element">
+            {{ element._id }}
+          </td>
+        </ng-container>
+
+        <!-- Assigned Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">
+            <p class="mb-0 fw-medium">{{ element.name }}</p>
+          </td>
+        </ng-container>
+
+        <!-- Budget Column -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Created At</th>
+          <td mat-cell *matCellDef="let element">
+            <p class="mb-0 fw-medium">
+              {{ element.createdAt | date: "medium" }}
+            </p>
+          </td>
+        </ng-container>
+
+        <!-- Priority Column -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-icon-button
+              [matMenuTriggerFor]="menu"
+              aria-label="Example icon-button with a menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="onEdit(element._id)">
+                <a><mat-icon>edit</mat-icon> Edit</a>
+              </button>
+              <button mat-menu-item (click)="onDelete(element._id)">
+                <a><mat-icon>delete</mat-icon> Delete</a>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>
