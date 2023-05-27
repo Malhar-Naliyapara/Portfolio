@@ -1,7 +1,7 @@
 # Portfolio
  Clone the repo.
  
- Install the node modules with npm intsall command.
+ Install the node modules with npm install command.
  
  Start frontend with npm start command.
  Start backend from npm run dev command.
